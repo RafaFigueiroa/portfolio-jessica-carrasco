@@ -83,8 +83,11 @@ function Gallery() {
 
 export default function Portfolio() {
   const heroRef = useRef<HTMLElement>(null);
+  const aboutRef = useRef<HTMLElement>(null);
   const [progress, setProgress] = useState(0);
+  const [aboutProgress, setAboutProgress] = useState(0);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [language, setLanguage] = useState("PT");
 
   useEffect(() => {
     const update = () => {
@@ -92,6 +95,13 @@ export default function Portfolio() {
       if (!hero) return;
       const rect = hero.getBoundingClientRect();
       setProgress(Math.max(0, Math.min(1, -rect.top / Math.max(1, hero.offsetHeight - window.innerHeight))));
+      const about = aboutRef.current;
+      if (about) {
+        const aboutRect = about.getBoundingClientRect();
+        const start = window.innerHeight * 0.82;
+        const range = window.innerHeight * 1.15;
+        setAboutProgress(Math.max(0, Math.min(1, (start - aboutRect.top) / range)));
+      }
     };
     update();
     window.addEventListener("scroll", update, { passive: true });
@@ -110,9 +120,14 @@ export default function Portfolio() {
       <header className={`fixed inset-x-0 top-0 z-40 flex items-center justify-between px-[clamp(22px,3vw,56px)] py-6 transition duration-300 ${navVisible ? "border-b border-[#55052d18] bg-white/95 text-[#55052d] backdrop-blur" : "pointer-events-none text-white opacity-0"}`}>
         <a className="text-[22px] font-medium tracking-[-.04em]" href="#home">Jessica Carrasco</a>
         <button className="text-xl sm:hidden" aria-label="Abrir menu" onClick={() => setMenuOpen(!menuOpen)}>{menuOpen ? "×" : "☰"}</button>
-        <nav className={`${menuOpen ? "flex" : "hidden"} absolute inset-x-0 top-[70px] flex-col items-center gap-5 bg-white p-6 text-[11px] font-medium tracking-[.06em] sm:static sm:flex sm:flex-row sm:bg-transparent sm:p-0`}>
-          <a href="#sobre" onClick={() => setMenuOpen(false)}>SOBRE</a><a href="#galeria" onClick={() => setMenuOpen(false)}>GALERIA</a><a href="#convite" onClick={() => setMenuOpen(false)}>CONVITE</a>
-        </nav>
+        <div className="flex items-center gap-6">
+          <nav className={`${menuOpen ? "flex" : "hidden"} absolute inset-x-0 top-[70px] flex-col items-center gap-5 bg-white p-6 text-[11px] font-medium tracking-[.06em] sm:static sm:flex sm:flex-row sm:bg-transparent sm:p-0`}>
+            <a href="#sobre" onClick={() => setMenuOpen(false)}>SOBRE</a><a href="#galeria" onClick={() => setMenuOpen(false)}>GALERIA</a><a href="#convite" onClick={() => setMenuOpen(false)}>CONVITE</a>
+          </nav>
+          <div className="flex items-center gap-1 text-[10px] tracking-[.12em]" aria-label="Idioma">
+            {["PT", "ES", "ENG"].map((item) => <button key={item} type="button" aria-pressed={language === item} onClick={() => setLanguage(item)} className={`px-1 transition ${language === item ? "font-bold opacity-100" : "opacity-45"}`}>{item}</button>)}
+          </div>
+        </div>
       </header>
 
       <main>
@@ -133,23 +148,26 @@ export default function Portfolio() {
           </div>
         </section>
 
-        <section id="sobre" className="scroll-mt-20 bg-[#f3eff7] px-[clamp(24px,6vw,100px)] py-[88px]">
+        <section id="sobre" ref={aboutRef} className="scroll-mt-20 bg-[#f3eff7] px-[clamp(24px,6vw,100px)] py-[88px]">
           <p className="mb-7 text-[10px] font-medium uppercase tracking-[.12em] text-[#55052d]">01 — Sobre</p>
           <h2 className="text-[clamp(42px,5.8vw,82px)] font-normal leading-none tracking-[-.055em] text-[#55052d]">Sobre Jessica</h2>
           <p className="mb-12 mt-6 text-base text-[#716175]">Do Chile ao Canadá. Um reencontro com a arte.</p>
-          <div className="relative mx-auto grid min-h-[570px] max-w-[1360px] grid-cols-2 overflow-hidden max-sm:grid-cols-1">
-            <Image src="/assets/flor-pixelada.png" alt="" width={180} height={190} className="pointer-events-none absolute left-1/2 top-[6%] z-10 -translate-x-1/2 opacity-40 mix-blend-multiply" />
-            <article className="flex min-h-[570px] flex-col justify-between bg-[#55052d] p-[clamp(28px,4vw,60px)] text-[#f5edf3] max-sm:min-h-[390px]">
-              <div><span className="text-[10px] tracking-[.1em] opacity-80">01 / ORIGEM</span><h3 className="mt-6 text-[clamp(55px,7.2vw,104px)] leading-[.95] tracking-[-.065em]">Chile.</h3></div>
-              <p className="max-w-[320px] text-[15px] leading-[1.7]">Jessica nasceu em Cerro Navia, Santiago, no Chile. Desde pequena, adorava desenhar, mas sua paixão pela arte foi sufocada por um sistema escolar rígido. Aos 17 anos, deixou os lápis e pincéis.</p>
-            </article>
-            <article className="flex min-h-[570px] flex-col justify-between bg-[#b6a6da] p-[clamp(28px,4vw,60px)] text-[#361953] max-sm:min-h-[390px]">
-              <div><span className="text-[10px] tracking-[.1em] opacity-80">02 / RECOMEÇO</span><h3 className="mt-6 text-[clamp(55px,7.2vw,104px)] leading-[.95] tracking-[-.065em]">Canadá.</h3></div>
-              <p className="ml-auto max-w-[320px] text-[15px] leading-[1.7] max-sm:ml-0">Em 2005, mudou-se para o Canadá, onde seu irmão mais velho já vivia. Foi em uma nova terra que Jessica se reconectou com a arte.</p>
-            </article>
-            <div className="absolute left-1/2 top-[43%] z-20 flex w-[calc(100%-100px)] -translate-x-1/2 items-center gap-4 text-[9px] tracking-[.1em] text-white max-sm:top-1/2 max-sm:w-[calc(100%-56px)]"><span>SANTIAGO</span><i className="h-px flex-1 bg-white/40"/><b className="border border-white/30 bg-[#57308a] p-2.5 text-[13px] font-normal">2005</b><i className="h-px flex-1 bg-white/40"/><span className="text-[#361953]">CANADÁ</span></div>
+          <div className="relative isolate mx-auto min-h-[720px] max-w-[1360px] overflow-hidden rounded-[2px] bg-[#4b3b58] px-4 py-10 shadow-[0_20px_70px_rgba(53,29,67,.16)] sm:px-10">
+            <div className="pointer-events-none absolute inset-0 opacity-60 blur-2xl" style={{ background: "radial-gradient(circle at 18% 25%, #d7a6bf 0 10%, transparent 35%), radial-gradient(circle at 82% 70%, #7e9eaa 0 8%, transparent 36%), #30243a" }} />
+            <svg className="pointer-events-none absolute inset-0 h-full w-full opacity-45" viewBox="0 0 1200 720" preserveAspectRatio="none" aria-hidden="true"><path d="M-30 520 C160 370 230 600 390 430 S650 230 780 390 S1010 620 1230 360" fill="none" stroke="#eaddec" strokeWidth="1.5" strokeDasharray="3 8" /></svg>
+            <div className="relative mx-auto h-[640px] max-w-[900px]">
+              <article className="paper-card paper-texture absolute left-[4%] right-auto top-[28%] z-[60] mx-0 h-[270px] w-[min(78vw,510px)] rounded-[2px] p-7 text-[#301b30] shadow-[0_15px_35px_rgba(20,10,30,.22)] transition-transform duration-700 ease-out sm:p-10" style={{ "--paper-y": `${Math.max(0, 1 - aboutProgress * 2.2) * 360 + 70}px`, "--paper-rotation": "-5deg" } as CSSProperties}>
+                <span className="text-[9px] tracking-[.16em] text-[#806c83]">01 / ORIGEM</span><h3 className="mt-4 font-[var(--font-hand)] text-5xl text-[#55052d]">Chile.</h3><p className="mt-4 max-w-[390px] text-[13px] leading-[1.65]">Jessica nasceu em Cerro Navia, Santiago, no Chile. Desde pequena, adorava desenhar, mas sua paixão foi sufocada por um sistema escolar rígido.</p>
+              </article>
+              <article className="paper-card paper-texture absolute left-auto right-[4%] top-[32%] z-[60] mx-0 h-[270px] w-[min(78vw,510px)] rounded-[2px] p-7 text-[#301b30] shadow-[0_15px_35px_rgba(20,10,30,.22)] transition-transform duration-700 ease-out sm:p-10" style={{ "--paper-y": `${Math.max(0, 1 - (aboutProgress - .18) * 2.2) * 390 + 70}px`, "--paper-rotation": "4deg" } as CSSProperties}>
+                <span className="text-[9px] tracking-[.16em] text-[#806c83]">02 / RECOMEÇO</span><h3 className="mt-4 font-[var(--font-hand)] text-5xl text-[#55052d]">Canadá.</h3><p className="mt-4 max-w-[390px] text-[13px] leading-[1.65]">Em 2005, mudou-se para o Canadá. Foi em uma nova terra que Jessica se reconectou com a arte e encontrou espaço para continuar criando.</p>
+              </article>
+              <article className="paper-card paper-texture absolute inset-x-0 top-[38%] z-40 mx-auto h-[270px] w-[min(78vw,510px)] rounded-[2px] p-7 text-[#301b30] shadow-[0_15px_35px_rgba(20,10,30,.22)] sm:p-10" style={{ "--paper-y": "0px", "--paper-rotation": "-1deg" } as CSSProperties}>
+                <span className="text-[9px] tracking-[.16em] text-[#806c83]">03 / HOJE</span><Image src="/assets/pixel-flower.svg" alt="" width={58} height={58} className="absolute right-7 top-6 opacity-25" /><p className="mt-8 max-w-[390px] text-[15px] leading-[1.7]">Hoje, Jessica é mãe de uma filha adolescente, artista visual, escritora e professora de arte. Também publicou três livros infantis e um livro de poesia.</p>
+              </article>
+              <div className="envelope-texture absolute inset-x-0 bottom-0 z-50 mx-auto h-[260px] w-[min(88vw,590px)] rounded-b-[8px] shadow-[0_18px_32px_rgba(20,10,30,.3)]" style={{ clipPath: "polygon(0 14%, 39% 14%, 50% 0, 61% 14%, 100% 14%, 100% 100%, 0 100%)" }}><div className="absolute inset-x-0 top-0 h-12 bg-[#9bae91]" style={{ clipPath: "polygon(0 0, 100% 0, 50% 100%)" }} /></div>
+            </div>
           </div>
-          <p className="ml-auto mt-9 max-w-[660px] text-[15px] leading-[1.7] text-[#695c6d]">Hoje, Jessica é mãe de uma filha adolescente, artista visual, escritora e professora de arte. Também publicou três livros infantis e um livro de poesia.</p>
         </section>
 
         <section id="galeria" className="scroll-mt-20 bg-white px-[clamp(24px,6vw,100px)] py-[88px]">

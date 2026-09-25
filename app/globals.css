@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Homemade+Apple&display=swap');
 @import "tailwindcss";
 
 * { box-sizing: border-box; }
@@ -13,7 +14,7 @@ button { cursor: pointer; }
   -webkit-background-clip: text;
 }
 
-:root { --font-hand: "Brush Script MT", "Segoe Script", cursive; }
+:root { --font-hand: "Homemade Apple", "Brush Script MT", "Segoe Script", cursive; }
 
 .title-write {
   clip-path: inset(0 100% 0 0);
@@ -24,6 +25,24 @@ button { cursor: pointer; }
   clip-path: inset(0 0 100% 0);
   animation: build-flower 1.5s steps(16, end) forwards;
   image-rendering: pixelated;
+}
+
+.paper-texture {
+  background-color: #fffdfb;
+  background-image: radial-gradient(#6e536b1c .7px, transparent .7px), repeating-linear-gradient(0deg, #ffffff00 0 3px, #8c6f8120 4px 5px);
+  background-size: 7px 7px, 100% 6px;
+}
+
+.paper-card { transform: translateY(var(--paper-y)) rotate(var(--paper-rotation)); }
+
+.envelope-texture {
+  background-color: #81977d;
+  background-image: radial-gradient(#ffffff1c .8px, transparent .8px), repeating-linear-gradient(90deg, #ffffff00 0 4px, #536a4d20 5px 6px);
+  background-size: 8px 8px, 7px 100%;
+}
+
+@media (max-width: 640px) {
+  .paper-card { left: 50%; right: auto; transform: translate(-50%, var(--paper-y)) rotate(var(--paper-rotation)); }
 }
 
 .gallery-roll {
