@@ -1,51 +1,48 @@
 @import "tailwindcss";
 
-/* :root {
-  --background: #ffffff;
-  --foreground: #171717;
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+button, a { color: inherit; }
+button { cursor: pointer; }
+
+.photo-text {
+  color: transparent;
+  background: url("/assets/jessica-carrasco-hero.png") center 44% / cover;
+  background-clip: text;
+  -webkit-background-clip: text;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+:root { --font-hand: "Brush Script MT", "Segoe Script", cursive; }
+
+.title-write {
+  clip-path: inset(0 100% 0 0);
+  animation: write-title 2.1s steps(48, end) .25s forwards;
 }
 
-html {
-  height: 100%;
+.pixel-build {
+  clip-path: inset(0 0 100% 0);
+  animation: build-flower 1.5s steps(16, end) forwards;
+  image-rendering: pixelated;
 }
 
-html,
-body {
-  max-width: 100vw;
-  overflow-x: hidden;
-}
-
-body {
-  min-height: 100%;
+.gallery-roll {
   display: flex;
   flex-direction: column;
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  gap: .5rem;
+  animation: gallery-roll-up 48s linear infinite;
+  animation-delay: var(--delay);
 }
 
-* {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
-}
+.gallery-roll-reverse { animation-name: gallery-roll-down; animation-duration: 56s; }
 
-a {
-  color: inherit;
-  text-decoration: none;
-}
+@keyframes write-title { to { clip-path: inset(0); } }
+@keyframes build-flower { to { clip-path: inset(0); } }
+@keyframes gallery-roll-up { to { transform: translateY(calc(-50% - .5rem)); } }
+@keyframes gallery-roll-down { from { transform: translateY(calc(-50% - .5rem)); } to { transform: translateY(0); } }
 
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
-} */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .title-write, .pixel-build { animation: none; clip-path: none; }
+  .gallery-roll { animation-play-state: paused; }
+}
