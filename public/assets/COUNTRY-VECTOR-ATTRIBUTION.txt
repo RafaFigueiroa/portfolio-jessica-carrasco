@@ -1,0 +1,3 @@
+Country outline vectors for Canada and Chile are adapted from Mapsicon by djaiss.
+Source: https://github.com/djaiss/mapsicon
+The Mapsicon repository requests attribution and prohibits resale of the maps.
